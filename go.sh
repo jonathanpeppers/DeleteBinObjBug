@@ -7,6 +7,7 @@ SLN=TheLittleThingsPlayground.sln
 CSPROJ=TheLittleThingsPlayground.Android/TheLittleThingsPlayground.Android.csproj
 XAML=TheLittleThingsPlayground/Views/AboutPage.xaml
 PACKAGE_NAME=com.xamarin.TheLittleThingsPlayground
+INSTALL_TARGETS=Install,_Run
 
 if [ ! -f $OLD_XA ]; then
    wget https://bosstoragemirror.azureedge.net/wrench/monodroid-mavericks-d15-7/df/dffc591202713c2ef7cbba8e371779cf445444f3/xamarin.android-8.3.3-2.pkg
@@ -27,14 +28,14 @@ sudo installer -pkg $OLD_XA -target /
 cd $TOP_DIR/../TheLittleThingsPlayground/
 git clean -dxf
 msbuild $SLN /t:Restore
-msbuild $CSPROJ /t:Install /bl:$TOP_DIR/first.binlog
+msbuild $CSPROJ /t:$INSTALL_TARGETS /bl:$TOP_DIR/first.binlog
 touch $XAML
-msbuild $CSPROJ /t:Install /p:EmbedAssembliesIntoApk=True /p:AndroidUseSharedRuntime=False /bl:$TOP_DIR/second.binlog
+msbuild $CSPROJ /t:$INSTALL_TARGETS /p:EmbedAssembliesIntoApk=True /p:AndroidUseSharedRuntime=False /bl:$TOP_DIR/second.binlog
 cd $TOP_DIR
 
 sudo installer -pkg $NEW_XA -target /
 
 cd $TOP_DIR/../TheLittleThingsPlayground/
 touch $XAML
-msbuild $CSPROJ /t:Install /bl:$TOP_DIR/third.binlog
+msbuild $CSPROJ /t:$INSTALL_TARGETS /bl:$TOP_DIR/third.binlog
 cd $TOP_DIR
